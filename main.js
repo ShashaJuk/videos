@@ -7,7 +7,7 @@ const avatars = [avatar1, avatar2, avatar3];
 
 const videoPromises = [];
 
-// let i = 0;
+let i = 0;
 for (const video of [loader, ...avatars]) {
   // fuck safari
   video.autoplay = true;
@@ -16,8 +16,8 @@ for (const video of [loader, ...avatars]) {
   videoPromises.push(
     new Promise((resolve) => {
       video.onloadedmetadata = () => {
-        // i++;
-        // alert(`${i}th video loaded`);
+        i++;
+        console.log(`${i}th video loaded`);
         resolve();
 
         // fuck safari
@@ -32,7 +32,7 @@ for (const video of [loader, ...avatars]) {
 loader.playbackRate = 8;
 
 Promise.all(videoPromises).then(() => {
-  // alert("all videos loaded");
+  console.log("all videos loaded");
 
   loader.play();
 
