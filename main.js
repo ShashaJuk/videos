@@ -13,7 +13,7 @@ for (const video of [loader, ...avatars]) {
   video.load();
   videoPromises.push(
     new Promise((resolve) => {
-      video.onloadedmetadata = () => {
+      video.onloadeddata = () => {
         i++;
         alert(`${i}th video loaded`);
         resolve();
