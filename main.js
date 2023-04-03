@@ -8,11 +8,14 @@ const avatars = [avatar1, avatar2, avatar3];
 
 const videoPromises = [];
 
+let i = 0;
 for (const video of [loader, ...avatars]) {
   video.load();
   videoPromises.push(
     new Promise((resolve) => {
       video.onloadedmetadata = () => {
+        i++;
+        alert(`${i}th video loaded`);
         resolve();
       };
     })
@@ -22,7 +25,7 @@ for (const video of [loader, ...avatars]) {
 loader.playbackRate = 8;
 
 Promise.all(videoPromises).then(() => {
-  console.log("videos loaded");
+  alert("all videos loaded");
 
   loader.play();
 
