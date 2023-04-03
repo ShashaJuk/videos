@@ -10,7 +10,7 @@ const videoPromises = [];
 let i = 0;
 for (const video of [loader, ...avatars]) {
   // fuck safari
-  video.autoplay = true;
+  // video.autoplay = true;
 
   video.load();
   videoPromises.push(
@@ -21,9 +21,9 @@ for (const video of [loader, ...avatars]) {
         resolve();
 
         // fuck safari
-        video.autoplay = false;
-        video.pause();
-        video.currentTime = 0;
+        // video.autoplay = false;
+        // video.pause();
+        // video.currentTime = 0;
       };
     })
   );
