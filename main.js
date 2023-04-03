@@ -3,20 +3,27 @@ const avatar1 = document.getElementById("avatar1");
 const avatar2 = document.getElementById("avatar2");
 const avatar3 = document.getElementById("avatar3");
 const videosContainer = document.getElementById("videos-container");
-
 const avatars = [avatar1, avatar2, avatar3];
 
 const videoPromises = [];
 
-let i = 0;
+// let i = 0;
 for (const video of [loader, ...avatars]) {
+  // fuck safari
+  video.autoplay = true;
+
   video.load();
   videoPromises.push(
     new Promise((resolve) => {
-      video.onloadeddata = () => {
-        i++;
-        alert(`${i}th video loaded`);
+      video.onloadedmetadata = () => {
+        // i++;
+        // alert(`${i}th video loaded`);
         resolve();
+
+        // fuck safari
+        video.autoplay = false;
+        video.pause();
+        video.currentTime = 0;
       };
     })
   );
@@ -25,7 +32,7 @@ for (const video of [loader, ...avatars]) {
 loader.playbackRate = 8;
 
 Promise.all(videoPromises).then(() => {
-  alert("all videos loaded");
+  // alert("all videos loaded");
 
   loader.play();
 
