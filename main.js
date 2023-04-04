@@ -2,28 +2,17 @@ const loader = document.getElementById("loader");
 const avatar1 = document.getElementById("avatar1");
 const avatar2 = document.getElementById("avatar2");
 const avatar3 = document.getElementById("avatar3");
-const videosContainer = document.getElementById("videos-container");
+
 const avatars = [avatar1, avatar2, avatar3];
 
 const videoPromises = [];
 
-let i = 0;
 for (const video of [loader, ...avatars]) {
-  // fuck safari
-  // video.autoplay = true;
-
   video.load();
   videoPromises.push(
     new Promise((resolve) => {
       video.onloadedmetadata = () => {
-        i++;
-        console.log(`${i}th video loaded`);
         resolve();
-
-        // fuck safari
-        // video.autoplay = false;
-        // video.pause();
-        // video.currentTime = 0;
       };
     })
   );
@@ -39,11 +28,12 @@ Promise.all(videoPromises).then(() => {
   loader.onended = () => {
     loader.style.opacity = 0;
     avatar1.style.opacity = 1;
+    avatar1.style.filter = 'blur(0px) hue-rotate(0deg) contrast(1)';
     avatar1.play();
     avatar1.ontimeupdate = () => {
       avatar1.ontimeupdate = null;
       for (const avatar of avatars) {
-        avatar.style.transition = "opacity 2s";
+        avatar.style.transition = "opacity 2s, filter 2s";
       }
     };
     buttonPrev.disabled = false;
@@ -70,18 +60,20 @@ Promise.all(videoPromises).then(() => {
     };
 
     function swapVideos(prev, next) {
-      applyFillter();
-      setTimeout(() => {
+      // applyFillter();
+      // setTimeout(() => {
         prev.pause();
         const time = prev.currentTime;
         next.currentTime = time;
         next.ontimeupdate = () => {
           next.ontimeupdate = null;
           prev.style.opacity = 0;
+          prev.style.filter = 'blur(32px) hue-rotate(180deg) contrast(10)';
           next.style.opacity = 1;
+          next.style.filter = 'blur(0px) hue-rotate(0deg) contrast(1)';
           next.play();
         };
-      }, 1500);
+      // }, 1500);
     }
   };
 });
