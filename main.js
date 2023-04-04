@@ -11,7 +11,8 @@ for (const video of [loader, ...avatars]) {
   video.load();
   videoPromises.push(
     new Promise((resolve) => {
-      video.onloadedmetadata = () => {
+      video.oncanplaythrough = () => {
+        video.oncanplaythrough = null;
         resolve();
       };
     })
