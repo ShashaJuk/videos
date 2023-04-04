@@ -5,29 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Vite App</title>
     <link href="style.css" rel="stylesheet" />
+    <script src="percentageLoad.js" defer></script>
     <script type="module" src="main.js" defer></script>
   </head>
   <body>
+    <span id="progress"></span>
     <div class="videos-container">
-      <video id="loader" muted playsinline preload="auto">
-        <source src="0.mp4" type="video/mp4">
-        <source src="0.webm" type="video/webm">
-      </video>
+      <video id="loader" muted playsinline></video>
 
-      <video id="avatar1" muted playsinline loop preload=auto>
-        <source src="1.mp4" type="video/mp4">
-        <source src="1.webm" type="video/webm">
-      </video>
+      <video id="avatar1" muted playsinline loop></video>
 
-      <video id="avatar2" muted playsinline loop preload=auto>
-        <source src="2.mp4" type="video/mp4">
-        <source src="2.webm" type="video/webm">
-      </video>
+      <video id="avatar2" muted playsinline loop></video>
 
-      <video id="avatar3" muted playsinline loop preload=auto>
-        <source src="3.mp4" type="video/mp4">
-        <source src="3.webm" type="video/webm">
-      </video>
+      <video id="avatar3" muted playsinline loop></video>
     </div>
 
     <div class="buttons-container">

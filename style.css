@@ -26,6 +26,12 @@ video {
   position: absolute;
 }
 
+#progress {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
 #loader {
   filter: grayscale(1);
   will-change: opacity;
