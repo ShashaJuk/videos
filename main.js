@@ -7,10 +7,10 @@ const progressSpan = document.getElementById('progress');
 const percentageLoad = new PercentageLoad();
 const result = await percentageLoad.load(
   [
-    "https://shashajuk.github.io/videos/0.mp4",
-    "https://shashajuk.github.io/videos/1.mp4",
-    "https://shashajuk.github.io/videos/2.mp4",
-    "https://shashajuk.github.io/videos/3.mp4",
+    "https://shashajuk.github.io/videos/0.mov",
+    "https://shashajuk.github.io/videos/1.mov",
+    "https://shashajuk.github.io/videos/2.mov",
+    "https://shashajuk.github.io/videos/3.mov",
   ],
   (progress) => {
     console.log("progress:", progress);
@@ -36,7 +36,7 @@ function createObjectURL(file) {
 
 for (let i = 0; i < [loader, ...avatars].length; i++) {
   [loader, ...avatars][i].src = createObjectURL(
-    new Blob([result[i]], { type: "video/mp4" })
+    new Blob([result[i]], { type: 'video/mp4; codecs="hvc1"' })
   );
   [loader, ...avatars][i].load();
   videoPromises.push(
