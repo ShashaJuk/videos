@@ -20,6 +20,16 @@
       <video id="avatar3" muted playsinline loop></video>
     </div>
 
+    <svg>
+      <filter id="pixelate" x="0" y="0">
+        <feFlood x="0" y="0" height="1" width="1"/>    
+        <feComposite width="1" height="1"/>
+        <feTile result="a"/>
+        <feComposite in="SourceGraphic" in2="a" operator="in"/>
+        <feMorphology operator="dilate" radius="0">
+      </filter>
+    </svg>
+
     <div class="buttons-container">
       <button id="buttonPrev" disabled>prev</button>
       <button id="buttonNext" disabled>next</button>
