@@ -1,38 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vite App</title>
-    <link href="style.css" rel="stylesheet" />
-    <script src="percentageLoad.js" defer></script>
-    <script type="module" src="main.js" defer></script>
-  </head>
-  <body>
-    <span id="progress"></span>
-    <div class="videos-container">
-      <video id="loader" muted playsinline></video>
 
-      <video id="avatar1" muted playsinline loop></video>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Vite App</title>
+  <link href="styles/style.css" rel="stylesheet" />
+  <script type="module" src="scripts/main.js" defer></script>
+</head>
 
-      <video id="avatar2" muted playsinline loop></video>
+<body>
 
-      <video id="avatar3" muted playsinline loop></video>
-    </div>
+  <video id="avatar0" muted playsinline loop></video>
+  <video id="avatar1" muted playsinline loop></video>
+  <video id="avatar2" muted playsinline loop></video>
 
-    <svg>
-      <filter id="pixelate" x="0" y="0">
-        <feFlood x="0" y="0" height="1" width="1"/>    
-        <feComposite width="1" height="1"/>
-        <feTile result="a"/>
-        <feComposite in="SourceGraphic" in2="a" operator="in"/>
-        <feMorphology operator="dilate" radius="0">
-      </filter>
-    </svg>
+  <div class="canvas-container">
+    <canvas id="canvas" width="1080" height="1080"></canvas>
+  </div>
+  
+  <div class="buttons-container">
+    <button id="buttonPrev" disabled>prev</button>
+    <button id="buttonNext" disabled>next</button>
+  </div>
 
-    <div class="buttons-container">
-      <button id="buttonPrev" disabled>prev</button>
-      <button id="buttonNext" disabled>next</button>
-    </div>
-  </body>
+</body>
+
 </html>
