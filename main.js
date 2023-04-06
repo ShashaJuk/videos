@@ -33,8 +33,11 @@ function createObjectURL(file) {
 
 for (let i = 0; i < [loader, ...avatars].length; i++) {
   [loader, ...avatars][i].src = createObjectURL(
-    new Blob([result[i]], { type: "video/webm" })
+    new Blob([result[i]], { type: isSafari ? "video/mp4" : "video/webm" })
   );
+  [loader, ...avatars][i].type = isSafari
+    ? 'video/mp4; codecs="hvc1"'
+    : "video/webm";
   [loader, ...avatars][i].load();
   videoPromises.push(
     new Promise((resolve) => {
@@ -59,10 +62,10 @@ Promise.all(videoPromises).then(() => {
     // avatar1.style.filter = "blur(0px) hue-rotate(0deg) contrast(1)";
     avatar1.play();
     // avatar1.ontimeupdate = () => {
-      // avatar1.ontimeupdate = null;
-      // for (const avatar of avatars) {
-      // avatar.style.transition = "opacity 2s, filter 2s";
-      // }
+    // avatar1.ontimeupdate = null;
+    // for (const avatar of avatars) {
+    // avatar.style.transition = "opacity 2s, filter 2s";
+    // }
     // };
     buttonPrev.disabled = false;
     buttonNext.disabled = false;
@@ -117,7 +120,7 @@ Promise.all(videoPromises).then(() => {
             next.play();
             decrease();
           };
-        }else if (tick < 100) {
+        } else if (tick < 100) {
           requestAnimationFrame(increase);
         }
       }
