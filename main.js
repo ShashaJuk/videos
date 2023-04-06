@@ -35,9 +35,9 @@ for (let i = 0; i < [loader, ...avatars].length; i++) {
   [loader, ...avatars][i].src = createObjectURL(
     new Blob([result[i]], { type: isSafari ? "video/mp4" : "video/webm" })
   );
-  [loader, ...avatars][i].type = isSafari
-    ? 'video/mp4; codecs="hvc1"'
-    : "video/webm";
+  // [loader, ...avatars][i].type = isSafari
+  //   ? 'video/mp4; codecs="hvc1"'
+  //   : "video/webm";
   [loader, ...avatars][i].load();
   videoPromises.push(
     new Promise((resolve) => {
