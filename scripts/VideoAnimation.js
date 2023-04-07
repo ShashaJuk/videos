@@ -1,5 +1,8 @@
 import { Graphics } from "./Graphics.js";
 
+import { detectSafari } from "./helpers/detectSafari.js";
+const isSafari = detectSafari();
+
 export class VideoAnimation {
     danceGraphics;
 
@@ -26,24 +29,41 @@ export class VideoAnimation {
 
     prevTime;
 
+    loopStrategy;
+    stopLoopStrategy;
+
     constructor(config) {
         this.danceGraphics = new Graphics({
             canvas: config.canvas,
         });
         this.dimensions = config.dimensions;
+
+        if ('requestVideoFrameCallback' in HTMLVideoElement.prototype) {
+            this.loopStrategy = () => { this.requestId = this.video.requestVideoFrameCallback(this.loop.bind(this)); }
+            this.stopLoopStrategy = () => { this.video.cancelVideoFrameCallback(this.requestId); }
+        } else {
+            if (isSafari) {
+                this.loopStrategy = () => { this.requestId = setTimeout(this.loop.bind(this), 41); }
+                this.stopLoopStrategy = () => { clearTimeout(this.requestId) }
+            } else {
+                this.loopStrategy = () => { this.requestId = requestAnimationFrame(this.loop.bind(this)); }
+                this.stopLoopStrategy = () => { cancelAnimationFrame(this.requestId); }
+            }
+        }
+
     }
 
     animatePixels(elapsed) {
         this.pixelSize = Math.max(
             this.pixelSizeMin,
-            this.pixelSize - elapsed*this.pixelationFadeSpeed
+            this.pixelSize - elapsed * this.pixelationFadeSpeed
         )
     }
 
     animateNoise(elapsed) {
         this.noiseStrength = Math.max(
             this.noiseStrengthMin,
-            this.noiseStrength - elapsed*this.noiseFadeSpeed
+            this.noiseStrength - elapsed * this.noiseFadeSpeed
         );
     }
 
@@ -58,22 +78,14 @@ export class VideoAnimation {
         this.animateNoise(elapsed);
         this.animatePixels(elapsed);
 
-        if ('requestVideoFrameCallback' in HTMLVideoElement.prototype) {
-            this.requestId = this.video.requestVideoFrameCallback(this.loop.bind(this));
-        } else {
-            this.requestId = requestAnimationFrame(this.loop.bind(this))
-        }
+        this.loopStrategy();
 
         this.prevTime = time;
     }
 
     startLoop() {
         this.prevTime = Date.now();
-        if ('requestVideoFrameCallback' in HTMLVideoElement.prototype) {
-            this.requestId = this.video.requestVideoFrameCallback(this.loop.bind(this));
-        } else {
-            this.requestId = requestAnimationFrame(this.loop.bind(this))
-        }
+        this.loopStrategy();
     }
 
     stopLoop() {
@@ -81,13 +93,9 @@ export class VideoAnimation {
         this.pixelSize = 100;
         this.noiseFadeSpeed = 0.000068;
         this.pixelationFadeSpeed = 0.06;
-    
+
         this.danceGraphics.draw(this.dimensions, this.time, this.noiseStrength, this.pixelSize)
 
-        if ('requestVideoFrameCallback' in HTMLVideoElement.prototype) {
-            this.video.cancelVideoFrameCallback(this.requestId);
-        } else {
-            cancelAnimationFrame(this.requestId);
-        }
+        this.stopLoopStrategy();
     }
 }
