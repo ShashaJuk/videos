@@ -12,11 +12,10 @@ const avatars = [avatar0, avatar1, avatar2];
 const isSafari = detectSafari();
 
 const sources = isSafari ?
-  ["assets/video/0.mov", "assets/video/1.mov", "assets/video/2.mov"] :
-  ["assets/video/0.webm", "assets/video/1.webm", "assets/video/2.webm"];
+  ["video/0.mov", "video/1.mov", "video/2.mov"] :
+  ["video/0.webm", "video/1.webm", "video/2.webm"];
 
 async function main() {
-
   const result = await percentageLoad(sources, (progress) => {
     loader.style.background = `linear-gradient(90deg, rgba(255,255,255,1) ${progress}%, rgba(255,255,255,0.25) ${progress}%)`;
   });
@@ -106,9 +105,6 @@ async function main() {
     }
 
   });
-
-
-
 }
 
 main();

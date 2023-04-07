@@ -110,6 +110,8 @@ void main() {
       )
   );
 
+  texture.rgb *= texture.a;
+
   gl_FragColor = texture;
 }
 `;
