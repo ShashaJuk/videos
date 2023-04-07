@@ -3,7 +3,7 @@ import { PercentageLoad } from "./helpers/PercentageLoad.js";
 import { createObjectURL } from "./helpers/createObjectURL.js";
 import { detectSafari } from "./helpers/detectSafari.js";
 
-const loader = document.getElementById("loader");console.log(loader)
+const loader = document.getElementById("loader");
 const avatar0 = document.getElementById("avatar0");
 const avatar1 = document.getElementById("avatar1");
 const avatar2 = document.getElementById("avatar2");
@@ -16,7 +16,6 @@ const sources = isSafari
   : ["assets/video/0.webm", "assets/video/1.webm", "assets/video/2.webm"];
 
 const result = await new PercentageLoad().load(sources, (progress) => {
-  console.log("progress:", progress);
   if(progress !== 100){
     loader.style.background = `linear-gradient(90deg, rgba(255,255,255,1) ${progress}%, rgba(255,255,255,0.25) ${progress}%)`;
   }else{
@@ -27,6 +26,11 @@ const result = await new PercentageLoad().load(sources, (progress) => {
 const videoPromises = [];
 
 for (let i = 0; i < avatars.length; i++) {
+  avatars[i].onerror = (e) => {
+    console.warn('video error:', e);
+    console.warn('error code:', e.code);
+    console.warn('video element:', e.target);
+  }
   avatars[i].src = createObjectURL(
     new Blob([result[i]], { type: isSafari ? "video/mp4" : "video/webm" })
   );
