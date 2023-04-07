@@ -1,4 +1,4 @@
-export async function load(urlArray, setProgress) {
+export async function percentageLoad(urlArray, setProgress) {
   async function downloadBlob(url, increaseProgress) {
     try {
       const response = await fetch(url);
