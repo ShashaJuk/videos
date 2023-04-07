@@ -11,9 +11,10 @@ const avatars = [avatar0, avatar1, avatar2];
 
 const isSafari = detectSafari();
 
-const sources = isSafari
-  ? ["assets/video/0.mov", "assets/video/1.mov", "assets/video/2.mov"]
-  : ["assets/video/0.webm", "assets/video/1.webm", "assets/video/2.webm"];
+const movVideos = ["assets/video/0.mov", "assets/video/1.mov", "assets/video/2.mov"];
+const webmVideos = ["assets/video/0.webm", "assets/video/1.webm", "assets/video/2.webm"];
+
+const sources = isSafari ? movVideos : webmVideos;
 
 const percentageLoad = new PercentageLoad();
 const result = await percentageLoad.load(sources, (progress) => {
@@ -37,12 +38,12 @@ for (let i = 0; i < avatars.length; i++) {
       avatars[i].onloadedmetadata = () => {
 
         avatars[i].oncanplaythrough = null;
-        
-        if(isSafari){
-          setTimeout(()=>{
+
+        if (isSafari) {
+          setTimeout(() => {
             resolve();
-          },1000)
-        }else{
+          }, 1000)
+        } else {
           resolve();
         }
 
