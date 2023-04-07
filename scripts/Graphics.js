@@ -35,6 +35,7 @@ export class Graphics {
   constructor(config) {
     this.canvas = config.canvas;
     this.gl = this.canvas.getContext("webgl", {
+      alpha: true,
       premultipliedAlpha: false,
     });
 

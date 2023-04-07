@@ -3,6 +3,7 @@ import { PercentageLoad } from "./helpers/PercentageLoad.js";
 import { createObjectURL } from "./helpers/createObjectURL.js";
 import { detectSafari } from "./helpers/detectSafari.js";
 
+const loader = document.getElementById("loader");console.log(loader)
 const avatar0 = document.getElementById("avatar0");
 const avatar1 = document.getElementById("avatar1");
 const avatar2 = document.getElementById("avatar2");
@@ -16,6 +17,11 @@ const sources = isSafari
 
 const result = await new PercentageLoad().load(sources, (progress) => {
   console.log("progress:", progress);
+  if(progress !== 100){
+    loader.style.background = `linear-gradient(90deg, rgba(255,255,255,1) ${progress}%, rgba(255,255,255,0.25) ${progress}%)`;
+  }else{
+    loader.style.display = 'none';
+  }
 });
 
 const videoPromises = [];
