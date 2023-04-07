@@ -1,4 +1,4 @@
-export async function percentageLoad(urlArray, setProgress) {
+async function percentageLoad(urlArray, setProgress) {
   async function downloadBlob(url, increaseProgress) {
     try {
       const response = await fetch(url);
@@ -59,3 +59,4 @@ export async function percentageLoad(urlArray, setProgress) {
   return result;
 }
 
+export default percentageLoad;

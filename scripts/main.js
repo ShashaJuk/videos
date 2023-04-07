@@ -1,5 +1,5 @@
 import { VideoAnimation } from "./VideoAnimation.js";
-import { percentageLoad } from "./helpers/percentageLoad.js";
+import percentageLoad from "./helpers/percentageLoad.js";
 import { createObjectURL } from "./helpers/createObjectURL.js";
 import { detectSafari } from "./helpers/detectSafari.js";
 
