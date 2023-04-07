@@ -1,7 +1,5 @@
 import { Graphics } from "./Graphics.js";
-
 import { detectSafari } from "./helpers/detectSafari.js";
-const isSafari = detectSafari();
 
 export class VideoAnimation {
     danceGraphics;
@@ -42,7 +40,7 @@ export class VideoAnimation {
             this.loopStrategy = () => { this.requestId = this.video.requestVideoFrameCallback(this.loop.bind(this)); }
             this.stopLoopStrategy = () => { this.video.cancelVideoFrameCallback(this.requestId); }
         } else {
-            if (isSafari) {
+            if (detectSafari()) {
                 this.loopStrategy = () => { this.requestId = setTimeout(this.loop.bind(this), 41); }
                 this.stopLoopStrategy = () => { clearTimeout(this.requestId) }
             } else {
