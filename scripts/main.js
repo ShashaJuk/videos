@@ -16,11 +16,7 @@ const sources = isSafari
   : ["assets/video/0.webm", "assets/video/1.webm", "assets/video/2.webm"];
 
 const result = await new PercentageLoad().load(sources, (progress) => {
-  if(progress !== 100){
-    loader.style.background = `linear-gradient(90deg, rgba(255,255,255,1) ${progress}%, rgba(255,255,255,0.25) ${progress}%)`;
-  }else{
-    loader.style.display = 'none';
-  }
+  loader.style.background = `linear-gradient(90deg, rgba(255,255,255,1) ${progress}%, rgba(255,255,255,0.25) ${progress}%)`;
 });
 
 const videoPromises = [];
@@ -37,15 +33,26 @@ for (let i = 0; i < avatars.length; i++) {
   avatars[i].load();
   videoPromises.push(
     new Promise((resolve) => {
-      avatars[i].oncanplaythrough = () => {
+      avatars[i].onloadedmetadata = () => {
+
         avatars[i].oncanplaythrough = null;
-        resolve();
+        
+        if(isSafari){
+          setTimeout(()=>{
+            resolve();
+          },1000)
+        }else{
+          resolve();
+        }
+
       };
     })
   );
 }
 
 Promise.all(videoPromises).then(() => {
+
+  loader.style.display = 'none';
 
   const videoAnimation = new VideoAnimation({
     canvas: document.getElementById('canvas'),
