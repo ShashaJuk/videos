@@ -36,11 +36,11 @@ export class Graphics {
     this.canvas = config.canvas;
     this.gl = this.canvas.getContext("webgl", {
       alpha: true,
-      // premultipliedAlpha: false,
+      premultipliedAlpha: false,
       powerPreference: 'high-performance',
     });
 
-    this.gl.viewport(0, 0, this.gl.drawingBufferWidth, this.gl.drawingBufferHeight);
+    // this.gl.viewport(0, 0, this.gl.drawingBufferWidth, this.gl.drawingBufferHeight);
 
     this.noiseProgram = createProgram(this.gl, vertexShader, noiseShader);
     this.pixelsAndFadeProgram = createProgram(this.gl, vertexShader, pixelateShader);
@@ -91,9 +91,9 @@ export class Graphics {
     );
 
     bindTexture(this.gl, this.originTexture);
-    this.gl.clearColor(0.0, 0.0, 0.0, 0.0);
-    this.gl.clear(this.gl.COLOR_BUFFER_BIT);
-    this.gl.viewport(0, 0, this.gl.canvas.height, this.gl.canvas.height);
+    // this.gl.clearColor(0.0, 0.0, 0.0, 0.0);
+    // this.gl.clear(this.gl.COLOR_BUFFER_BIT);
+    // this.gl.viewport(0, 0, this.gl.canvas.height, this.gl.canvas.height);
     this.gl.drawArrays(this.gl.TRIANGLES, 0, 6);
 
     // set noise params
@@ -106,9 +106,9 @@ export class Graphics {
     this.gl.bindFramebuffer(this.gl.FRAMEBUFFER, null);
 
     bindTexture(this.gl, this.textureAndFrameBuffer.texture);
-    this.gl.clearColor(0.0, 0.0, 0.0, 0.0);
-    this.gl.clear(this.gl.COLOR_BUFFER_BIT);
-    this.gl.viewport(0, 0, this.gl.canvas.height, this.gl.canvas.height);
+    // this.gl.clearColor(0.0, 0.0, 0.0, 0.0);
+    // this.gl.clear(this.gl.COLOR_BUFFER_BIT);
+    // this.gl.viewport(0, 0, this.gl.canvas.height, this.gl.canvas.height);
     this.gl.drawArrays(this.gl.TRIANGLES, 0, 6);
 
     // set pixels params
