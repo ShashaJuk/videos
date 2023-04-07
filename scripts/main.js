@@ -46,8 +46,6 @@ Promise.all(videoPromises).then(() => {
   videoAnimation.startLoop();
   videoAnimation.video.play();
 
-  // ---- ---- ---- ---- //
-
   buttonPrev.disabled = false;
   buttonNext.disabled = false;
 

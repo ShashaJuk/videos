@@ -45,15 +45,8 @@ export class Graphics {
 
     this.textureAndFrameBuffer = createTextureAndFramebuffer(this.gl);
 
-    this.initUniformParams();
 
-    this.originTexture = createTexture(this.gl);
-
-    setAttributes(this.gl, this.noiseProgram);
-    setAttributes(this.gl, this.pixelsAndFadeProgram);
-  }
-
-  initUniformParams() {
+    // init uniform params
     this.uniformParams.noiseDimensions = this.gl.getUniformLocation(
       this.noiseProgram,
       "dimensions"
@@ -74,19 +67,11 @@ export class Graphics {
       this.pixelsAndFadeProgram,
       "pixelSize"
     );
-  }
 
-  setNoiseParams(dimensions, tick, noiseStrengthValue) {
-    const { noiseDimensions, time, noiseStrength } = this.uniformParams;
-    this.gl.uniform2fv(noiseDimensions, dimensions);
-    this.gl.uniform1f(time, tick);
-    this.gl.uniform1f(noiseStrength, noiseStrengthValue);
-  }
+    this.originTexture = createTexture(this.gl);
 
-  setPixelsFadeParams(dimensions, pixelSizeValue) {
-    const { pixelsDimensions, pixelSize } = this.uniformParams;
-    this.gl.uniform2fv(pixelsDimensions, dimensions);
-    this.gl.uniform1f(pixelSize, pixelSizeValue);
+    setAttributes(this.gl, this.noiseProgram);
+    setAttributes(this.gl, this.pixelsAndFadeProgram);
   }
 
   initTexture(texture) {
@@ -94,7 +79,9 @@ export class Graphics {
     addTexture(this.gl, texture);
   }
 
-  drawNoise() {
+  draw(dimensions, tick, noiseStrengthValue, pixelSizeValue) {
+
+    // noise
     this.gl.useProgram(this.noiseProgram);
     this.gl.bindFramebuffer(
       this.gl.FRAMEBUFFER,
@@ -106,9 +93,13 @@ export class Graphics {
     this.gl.clear(this.gl.COLOR_BUFFER_BIT);
     this.gl.viewport(0, 0, this.gl.canvas.height, this.gl.canvas.height);
     this.gl.drawArrays(this.gl.TRIANGLES, 0, 6);
-  }
 
-  drawPixels() {
+    // set noise params
+    this.gl.uniform2fv(this.uniformParams.noiseDimensions, dimensions);
+    this.gl.uniform1f(this.uniformParams.time, tick);
+    this.gl.uniform1f(this.uniformParams.noiseStrength, noiseStrengthValue);
+
+    // pixels
     this.gl.useProgram(this.pixelsAndFadeProgram);
     this.gl.bindFramebuffer(this.gl.FRAMEBUFFER, null);
 
@@ -117,6 +108,10 @@ export class Graphics {
     this.gl.clear(this.gl.COLOR_BUFFER_BIT);
     this.gl.viewport(0, 0, this.gl.canvas.height, this.gl.canvas.height);
     this.gl.drawArrays(this.gl.TRIANGLES, 0, 6);
+
+    // set pixels params
+    this.gl.uniform2fv(this.uniformParams.pixelsDimensions, dimensions);
+    this.gl.uniform1f(this.uniformParams.pixelSize, pixelSizeValue);
   }
 
 }

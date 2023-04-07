@@ -1,7 +1,4 @@
 import { Graphics } from "./Graphics.js";
-// import { detectSafari } from "./helpers/detectSafari.js";
-
-// const isSafari = detectSafari();
 
 export class VideoAnimation {
     danceGraphics;
@@ -12,7 +9,7 @@ export class VideoAnimation {
 
     dimensions;
 
-    tick = 0;
+    time = 0;
 
     noiseStrength = 0.1;
     noiseStrengthMin = 0;
@@ -20,11 +17,14 @@ export class VideoAnimation {
     pixelSize = 100;
     pixelSizeMin = 1;
 
-    noiseFadeSpeed = 0.017;
+    noiseFadeSpeed = 0.000068;
+    noiseFluctuationSpeed = 0.01;
 
-    pixelationFadeSpeed = 6;
+    pixelationFadeSpeed = 0.06;
 
     pixelationStep = 4;
+
+    prevTime;
 
     constructor(config) {
         this.danceGraphics = new Graphics({
@@ -33,52 +33,61 @@ export class VideoAnimation {
         this.dimensions = config.dimensions;
     }
 
-    animatePixels() {
+    animatePixels(elapsed) {
         this.pixelSize = Math.max(
             this.pixelSizeMin,
-            this.pixelSize - this.pixelationFadeSpeed
+            this.pixelSize - elapsed*this.pixelationFadeSpeed
         )
     }
 
-    animateNoise() {
+    animateNoise(elapsed) {
         this.noiseStrength = Math.max(
             this.noiseStrengthMin,
-            this.noiseStrength - this.noiseFadeSpeed 
+            this.noiseStrength - elapsed*this.noiseFadeSpeed
         );
     }
 
     loop() {
+        const time = Date.now();
+        const elapsed = time - this.prevTime;
+        this.time += elapsed;
+
         this.danceGraphics.initTexture(this.video);
+        this.danceGraphics.draw(this.dimensions, this.time, this.noiseStrength, this.pixelSize)
 
-        this.danceGraphics.drawNoise();
-        this.danceGraphics.setNoiseParams(this.dimensions, this.tick, this.noiseStrength);
+        this.animateNoise(elapsed);
+        this.animatePixels(elapsed);
 
-        this.danceGraphics.drawPixels();
-        this.danceGraphics.setPixelsFadeParams(this.dimensions, this.pixelSize);
+        if ('requestVideoFrameCallback' in HTMLVideoElement.prototype) {
+            this.requestId = this.video.requestVideoFrameCallback(this.loop.bind(this));
+        } else {
+            this.requestId = requestAnimationFrame(this.loop.bind(this))
+        }
 
-        this.animateNoise();
-        this.animatePixels();
-
-        this.tick += 1;
-
-        this.requestId = this.video.requestVideoFrameCallback(this.loop.bind(this));
+        this.prevTime = time;
     }
 
     startLoop() {
-        this.requestId = this.video.requestVideoFrameCallback(this.loop.bind(this));
+        this.prevTime = Date.now();
+        if ('requestVideoFrameCallback' in HTMLVideoElement.prototype) {
+            this.requestId = this.video.requestVideoFrameCallback(this.loop.bind(this));
+        } else {
+            this.requestId = requestAnimationFrame(this.loop.bind(this))
+        }
     }
 
     stopLoop() {
         this.noiseStrength = 0.1;
         this.pixelSize = 100;
-        this.pixelationFadeSpeed = 8
-        this.noiseFadeSpeed =0.023
+        this.noiseFadeSpeed = 0.000068;
+        this.pixelationFadeSpeed = 0.06;
+    
+        this.danceGraphics.draw(this.dimensions, this.time, this.noiseStrength, this.pixelSize)
 
-        this.danceGraphics.drawNoise();
-        this.danceGraphics.setNoiseParams(this.dimensions, this.tick, this.noiseStrength);
-        this.danceGraphics.drawPixels();
-        this.danceGraphics.setPixelsFadeParams(this.dimensions, this.pixelSize);
-
-        this.video.cancelVideoFrameCallback(this.requestId)
+        if ('requestVideoFrameCallback' in HTMLVideoElement.prototype) {
+            this.video.cancelVideoFrameCallback(this.requestId);
+        } else {
+            cancelAnimationFrame(this.requestId);
+        }
     }
 }
