@@ -15,7 +15,8 @@ const sources = isSafari
   ? ["assets/video/0.mov", "assets/video/1.mov", "assets/video/2.mov"]
   : ["assets/video/0.webm", "assets/video/1.webm", "assets/video/2.webm"];
 
-const result = await new PercentageLoad().load(sources, (progress) => {
+const percentageLoad = new PercentageLoad();
+const result = await percentageLoad.load(sources, (progress) => {
   loader.style.background = `linear-gradient(90deg, rgba(255,255,255,1) ${progress}%, rgba(255,255,255,0.25) ${progress}%)`;
 });
 
