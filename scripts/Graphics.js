@@ -36,7 +36,8 @@ export class Graphics {
     this.canvas = config.canvas;
     this.gl = this.canvas.getContext("webgl", {
       alpha: true,
-      premultipliedAlpha: false,
+      // premultipliedAlpha: false,
+      powerPreference: 'high-performance',
     });
 
     this.gl.viewport(0, 0, this.gl.drawingBufferWidth, this.gl.drawingBufferHeight);
