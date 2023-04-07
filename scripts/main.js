@@ -1,5 +1,5 @@
 import { VideoAnimation } from "./VideoAnimation.js";
-import { PercentageLoad } from "./helpers/PercentageLoad.js";
+import { load } from "./helpers/percentageLoad.js";
 import { createObjectURL } from "./helpers/createObjectURL.js";
 import { detectSafari } from "./helpers/detectSafari.js";
 
@@ -16,8 +16,8 @@ const webmVideos = ["assets/video/0.webm", "assets/video/1.webm", "assets/video/
 
 const sources = isSafari ? movVideos : webmVideos;
 
-const percentageLoad = new PercentageLoad();
-const result = await percentageLoad.load(sources, (progress) => {
+
+const result = await load(sources, (progress) => {
   loader.style.background = `linear-gradient(90deg, rgba(255,255,255,1) ${progress}%, rgba(255,255,255,0.25) ${progress}%)`;
 });
 
