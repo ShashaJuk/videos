@@ -39,16 +39,13 @@ export class VideoAnimation {
         if ('requestVideoFrameCallback' in HTMLVideoElement.prototype) {
             this.loopStrategy = () => { this.requestId = this.video.requestVideoFrameCallback(this.loop.bind(this)); }
             this.stopLoopStrategy = () => { this.video.cancelVideoFrameCallback(this.requestId); }
-            console.log('requestVideoFrameCallback loop strategy')
         } else {
             if (detectSafari()) {
                 this.loopStrategy = () => { this.requestId = setTimeout(this.loop.bind(this), 41); }
                 this.stopLoopStrategy = () => { clearTimeout(this.requestId) }
-                console.log('setTimeout loop strategy')
             } else {
                 this.loopStrategy = () => { this.requestId = requestAnimationFrame(this.loop.bind(this)); }
                 this.stopLoopStrategy = () => { cancelAnimationFrame(this.requestId); }
-                console.log('requestAnimationFrame loop strategy')
             }
         }
 
@@ -69,7 +66,7 @@ export class VideoAnimation {
     }
 
     loop() {
-        const time = Date.now();
+        const time = performance.now();
         const elapsed = time - this.prevTime;
         this.time += elapsed;
 
@@ -85,7 +82,7 @@ export class VideoAnimation {
     }
 
     startLoop() {
-        this.prevTime = Date.now();
+        this.prevTime = performance.now();
         this.loopStrategy();
     }
 

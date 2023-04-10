@@ -39,7 +39,6 @@ export class Dance {
             return this.isSafari ? avatar.endpoints.mov : avatar.endpoints.webm;
         });
         const videosData = await percentageLoad(sources, this.onLoading);
-        console.log(videosData)
         await this.initVideos(videosData);
 
         this.onLoaded()

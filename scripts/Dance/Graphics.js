@@ -6,8 +6,8 @@ import { setAttributes } from "../helpers/webGLHelpers/setAttributes.js";
 import { bindTexture } from "../helpers/webGLHelpers/bindTexture.js";
 
 import { vertexShader } from "../shaders/vertex.js";
-import { noiseShader } from "../shaders/dance/noise.js";
-import { pixelateShader } from "../shaders/dance/pixelate.js";
+import { noiseShader } from "../shaders/noise.js";
+import { pixelateShader } from "../shaders/pixelate.js";
 
 export class Graphics {
 
