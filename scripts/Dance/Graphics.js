@@ -1,13 +1,13 @@
-import { createProgram } from "./helpers/webGLHelpers/createProgram.js";
-import { createTexture } from "./helpers/webGLHelpers/createTexture.js";
-import { addTexture } from "./helpers/webGLHelpers/addTexture.js";
-import { createTextureAndFramebuffer } from "./helpers/webGLHelpers/createTextureAndFrameBuffer.js";
-import { setAttributes } from "./helpers/webGLHelpers/setAttributes.js";
-import { bindTexture } from "./helpers/webGLHelpers/bindTexture.js";
+import { createProgram } from "../helpers/webGLHelpers/createProgram.js";
+import { createTexture } from "../helpers/webGLHelpers/createTexture.js";
+import { addTexture } from "../helpers/webGLHelpers/addTexture.js";
+import { createTextureAndFramebuffer } from "../helpers/webGLHelpers/createTextureAndFrameBuffer.js";
+import { setAttributes } from "../helpers/webGLHelpers/setAttributes.js";
+import { bindTexture } from "../helpers/webGLHelpers/bindTexture.js";
 
-import { vertexShader } from "./shaders/vertex.js";
-import { noiseShader } from "./shaders/noise.js";
-import { pixelateShader } from "./shaders/pixelate.js";
+import { vertexShader } from "../shaders/vertex.js";
+import { noiseShader } from "../shaders/dance/noise.js";
+import { pixelateShader } from "../shaders/dance/pixelate.js";
 
 export class Graphics {
 
@@ -36,16 +36,13 @@ export class Graphics {
     this.canvas = config.canvas;
     this.gl = this.canvas.getContext("webgl", {
       alpha: true,
-      premultipliedAlpha: true,
+      premultipliedAlpha: true, // safari semitransparent pixels fix
     });
-
-    // this.gl.viewport(0, 0, this.gl.drawingBufferWidth, this.gl.drawingBufferHeight);
 
     this.noiseProgram = createProgram(this.gl, vertexShader, noiseShader);
     this.pixelsAndFadeProgram = createProgram(this.gl, vertexShader, pixelateShader);
 
     this.textureAndFrameBuffer = createTextureAndFramebuffer(this.gl);
-
 
     // init uniform params
     this.uniformParams.noiseDimensions = this.gl.getUniformLocation(
@@ -90,9 +87,6 @@ export class Graphics {
     );
 
     bindTexture(this.gl, this.originTexture);
-    // this.gl.clearColor(0.0, 0.0, 0.0, 0.0);
-    // this.gl.clear(this.gl.COLOR_BUFFER_BIT);
-    // this.gl.viewport(0, 0, this.gl.canvas.height, this.gl.canvas.height);
     this.gl.drawArrays(this.gl.TRIANGLES, 0, 6);
 
     // set noise params
@@ -105,9 +99,6 @@ export class Graphics {
     this.gl.bindFramebuffer(this.gl.FRAMEBUFFER, null);
 
     bindTexture(this.gl, this.textureAndFrameBuffer.texture);
-    // this.gl.clearColor(0.0, 0.0, 0.0, 0.0);
-    // this.gl.clear(this.gl.COLOR_BUFFER_BIT);
-    // this.gl.viewport(0, 0, this.gl.canvas.height, this.gl.canvas.height);
     this.gl.drawArrays(this.gl.TRIANGLES, 0, 6);
 
     // set pixels params

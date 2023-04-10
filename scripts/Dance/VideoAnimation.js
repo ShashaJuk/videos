@@ -1,5 +1,5 @@
 import { Graphics } from "./Graphics.js";
-import { detectSafari } from "./helpers/detectSafari.js";
+import { detectSafari } from "../helpers/detectSafari.js";
 
 export class VideoAnimation {
     danceGraphics;

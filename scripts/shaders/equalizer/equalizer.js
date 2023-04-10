@@ -1,13 +1,12 @@
-export const noiseShader = `
+export const equalizerShader = `
 precision highp float;
 
 #define TWOPI 6.28318530718
 
 varying vec2 v_texCoord;
-uniform sampler2D texture;
 
-uniform float time;
 uniform vec2 dimensions;
+uniform float time;
 uniform float noiseStrength;
 
 vec3 mod289(vec3 x) {
@@ -90,28 +89,28 @@ float snoise(vec3 v) {
 
 void main() {
   vec2 coord = v_texCoord;
-  coord.y = 1.0 - coord.y;
 
-  float speed = 0.01;
-  float noiseTime = time * speed;
-  float noiseScale = 0.0008;
+//   float speed = 0.01;
+//   float noiseTime = time * speed;
+//   float noiseScale = 0.08;
 
-  float noise = snoise(vec3(
-      gl_FragCoord.x * noiseScale,
-      gl_FragCoord.y * noiseScale,
-      noiseTime
-  ));
+//   float noise = snoise(vec3(
+//       gl_FragCoord.x * noiseScale,
+//       gl_FragCoord.y * noiseScale,
+//       noiseTime
+//   ));
 
-  vec4 texture = texture2D(
-      texture,
-      vec2(
-          fract(coord).x + noiseStrength * sin(noise * TWOPI),
-          fract(coord).y + noiseStrength * cos(noise * TWOPI)
-      )
-  );
+//   noise = (noise + 1.0) / 2.0;
 
-  texture.rgb *= texture.a;
+//   vec4 color = vec4(noise, 0.0, 0.0, 1.0);
 
-  gl_FragColor = texture;
+//   gl_FragColor = color;
+
+  if(coord.x > 0.5){
+    gl_FragColor = vec4(0.0, 0.0, 1.0, 1.0);
+  }
+  if(coord.y > 0.5){
+    gl_FragColor = vec4(0.0, 1.0, 0.0, 1.0);
+  }
 }
 `;
