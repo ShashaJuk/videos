@@ -1,4 +1,5 @@
 import { Dance } from "./Dance/Dance.js";
+import { EqualizerAnimation } from "./Equalizer/EqualizerAnimation.js";
 
 const loader = document.getElementById("loader");
 
@@ -10,6 +11,8 @@ const canvas = document.getElementById("canvas");
 
 const buttonPrev = document.getElementById("buttonPrev");
 const buttonNext = document.getElementById("buttonNext");
+
+const equalizerCanvas = document.getElementById("equalizerCanvas");
 
 const avatars = [
   {
@@ -38,3 +41,9 @@ new Dance({
   buttonPrev: buttonPrev,
   buttonNext: buttonNext
 });
+
+new EqualizerAnimation({
+  canvas: equalizerCanvas,
+  time: performance.now(),
+  noiseStrength: 40,
+})
