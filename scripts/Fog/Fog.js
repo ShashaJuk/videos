@@ -18,7 +18,7 @@ export class Equalizer {
 
     constructor(config) {
         this.canvas = config.canvas;
-        this.gl = this.canvas.getContext("webgl");
+        this.gl = this.canvas.getContext("webgl", {premultipliedAlpha: false});
 
         this.fogProgramm = createProgram(this.gl, vertexShader, fogShader);
 

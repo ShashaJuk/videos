@@ -89,82 +89,46 @@ float snoise(vec3 v) {
 
 
 
-
-
-
-
-
-
-
-void main() {
-    // CREATE COORD SYSTEM
-
-    vec2 coord = vec2(
-        gl_FragCoord.x - dimensions.x / 2.0,
-        (gl_FragCoord.y - dimensions.y / 2.0)
-    );
-
-    coord.y *= 4.0;
-
-
-
-    // CREATE DISPLACEMENT
-
-    float speedDisplace = 0.00001;
-    float noiseDisplaceTime = time * speedDisplace;
-    float noiseDisplaceScale = 0.0008;
-    float noiseDisplaceStrength = 64.0;
-
-    float noiseDisplace = snoise(vec3(
-        coord.x * noiseDisplaceScale * 0.1* 4.0,
-        coord.y * noiseDisplaceScale * 0.1,
-        noiseDisplaceTime
-    ));
-    noiseDisplace *= 2.0;
-
-    float noiseDisplace2 = snoise(vec3(
-        coord.x * noiseDisplaceScale * 2.0,
-        coord.y * noiseDisplaceScale * 2.0 ,
-        noiseDisplaceTime
-    ));
-    noiseDisplace2 *= 0.5;
-
-    float noiseDisplace3 = snoise(vec3(
-        coord.x * noiseDisplaceScale * 4.0,
-        coord.y * noiseDisplaceScale * 4.0,
-        noiseDisplaceTime
-    ));
-    noiseDisplace3 *= 0.25;
-
-    float noiseDisplace4 = snoise(vec3(
-        coord.x * noiseDisplaceScale * 64.0,
-        coord.y * noiseDisplaceScale * 64.0,
-        noiseDisplaceTime * 4.0
-    ));
-    noiseDisplace4 *= 0.025;
-
-    noiseDisplace = noiseDisplace + noiseDisplace2 + noiseDisplace3 + noiseDisplace4;
-
-
-
-
-
-    // apply displacement
-
-    coord = vec2(
-        coord.x + noiseDisplaceStrength * sin(noiseDisplace * TWOPI),
-        coord.y + noiseDisplaceStrength * cos(noiseDisplace * TWOPI)
-    );
-
-
-
-
-
-    // CREATE FOG
-
-    float speed = 0.00003;
-    float noiseTime = time * speed;
+float createDisplacement(vec2 coord){
+    float noiseTime = time * 0.00001;
     float noiseScale = 0.0008;
+
+
+    float noise = snoise(vec3(
+        coord.x * noiseScale * 0.1* 4.0,
+        coord.y * noiseScale * 0.1,
+        noiseTime
+    ));
+    noise *= 2.0;
+
+    float noise2 = snoise(vec3(
+        noise * coord.x * noiseScale * 2.0,
+        noise * coord.y * noiseScale * 2.0 ,
+        noiseTime
+    ));
+    noise2 *= 0.5;
+
+    float noise3 = snoise(vec3(
+        noise2 * coord.x * noiseScale * 4.0,
+        noise2 * coord.y * noiseScale * 4.0,
+        noiseTime
+    ));
+    noise3 *= 0.25;
+
+    float noise4 = snoise(vec3(
+        noise3 * coord.x * noiseScale * 64.0,
+        noise3 * coord.y * noiseScale * 64.0,
+        noiseTime * 4.0
+    ));
+    noise4 *= 0.025;
+
+    noise = noise + noise2 + noise3 + noise4;
+    return noise;
+}
+
+float createFog(vec2 coord){
+    float noiseTime = time * 0.00003;
+    float noiseScale = 0.0004;
 
     float noise = snoise(vec3(
         coord.x * noiseScale,
@@ -194,13 +158,33 @@ void main() {
     noise = (noise + noise2 + noise3) / 3.0;
     noise *= 0.5;
     noise -= 0.05;
+    return noise;
+}
 
+void main() {
+
+    vec2 coord = vec2(
+        gl_FragCoord.x - dimensions.x / 2.0,
+        (gl_FragCoord.y - dimensions.y / 2.0)
+    );
+
+    coord.y *= 4.0;
+
+    float noiseDisplace = createDisplacement(coord);
+
+    float noiseDisplaceStrength = 64.0;
     
+    coord = vec2(
+        coord.x + noiseDisplaceStrength * sin(noiseDisplace * TWOPI),
+        coord.y + noiseDisplaceStrength * cos(noiseDisplace * TWOPI)
+    );
 
+    float noise = createFog(coord);
 
+    vec4 color = vec4(1.0, 1.0, 1.0, noise);
 
-    noise *= v_texCoord.y * v_texCoord.y;
+    color.a *= v_texCoord.y * v_texCoord.y;
 
-    gl_FragColor = vec4(noise, noise, noise, noise);
+    gl_FragColor = color;
 }
 `;
