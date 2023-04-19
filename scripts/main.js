@@ -4,4 +4,4 @@ const equalizerCanvas = document.getElementById("equalizerCanvas");
 
 new EqualizerAnimation({
   canvas: equalizerCanvas
-})
+});

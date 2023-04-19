@@ -13,14 +13,15 @@ export class EqualizerAnimation {
         })
 
         this.resizeHandler = this.resizeHandler.bind(this);
-        window.addEventListener('resize', this.resizeHandler);
         this.loop = this.loop.bind(this);
+
+        window.addEventListener('resize', this.resizeHandler);
         this.loop();
     }
 
     resizeHandler() {
         this.setSize();
-        this.draw()
+        this.equalizer.resize();
     }
 
     setSize() {
@@ -34,6 +35,6 @@ export class EqualizerAnimation {
 
     loop() {
         this.draw();
-        requestAnimationFrame(this.loop)
+        requestAnimationFrame(this.loop);
     }
 }

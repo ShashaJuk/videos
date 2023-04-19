@@ -21,6 +21,7 @@ export class Equalizer {
         this.gl = this.canvas.getContext("webgl", {premultipliedAlpha: false});
 
         this.fogProgramm = createProgram(this.gl, vertexShader, fogShader);
+        this.gl.useProgram(this.fogProgramm);
 
         // init uniform params
         this.uniformParams.fogDimensions = this.gl.getUniformLocation(
@@ -32,28 +33,32 @@ export class Equalizer {
             "time"
         );
 
+        this.gl.uniform2fv(this.uniformParams.fogDimensions, [
+            this.canvas.offsetWidth * window.devicePixelRatio,
+            this.canvas.offsetHeight * window.devicePixelRatio
+        ]);
         setAttributes(this.gl, this.fogProgramm);
     }
 
-    draw(tick) {
-        // handle resizes
+    resize(){
         this.gl.viewport(
             0,
             0,
             this.canvas.offsetWidth * window.devicePixelRatio,
             this.canvas.offsetHeight * window.devicePixelRatio
         );
-
-        // fog
-        this.gl.useProgram(this.fogProgramm);
-        this.gl.drawArrays(this.gl.TRIANGLES, 0, 6);
-
-        // set fog params
+        
         this.gl.uniform2fv(this.uniformParams.fogDimensions, [
             this.canvas.offsetWidth * window.devicePixelRatio,
             this.canvas.offsetHeight * window.devicePixelRatio
         ]);
+
+        this.gl.drawArrays(this.gl.TRIANGLES, 0, 6);
+    }
+
+    draw(tick) {
         this.gl.uniform1f(this.uniformParams.fogTime, tick);
+        this.gl.drawArrays(this.gl.TRIANGLES, 0, 6);
     }
 
 }
